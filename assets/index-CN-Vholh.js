@@ -3099,7 +3099,7 @@ This typically indicates that your device does not have a healthy Internet conne
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */Qa(T2e,k2e,"app");const C2e={apiKey:"",authDomain:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:"",measurementId:""},J0=Ij(C2e);Gd(J0);const us=t2e(J0),D4="@firebase/installations",eR="0.6.11";/**
+ */Qa(T2e,k2e,"app");const C2e={apiKey:"AIzaSyCwHGW4T4jcEUXoRLm3ASJbnMVxcugGC5I",authDomain:"stem-doc.firebaseapp.com",projectId:"stem-doc",storageBucket:"stem-doc.firebasestorage.app",messagingSenderId:"461869432074",appId:"1:461869432074:web:628bbdc25e6539a5c34ef3",measurementId:"G-86RFW657J0"},J0=Ij(C2e);Gd(J0);const us=t2e(J0),D4="@firebase/installations",eR="0.6.11";/**
  * @license
  * Copyright 2019 Google LLC
  *
