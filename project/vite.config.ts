@@ -8,4 +8,4 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'], // 必要に応じて保持または削除
   },
-});
+});//a
