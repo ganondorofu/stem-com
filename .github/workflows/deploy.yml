@@ -37,11 +37,6 @@ jobs:
           echo "VITE_APP_APP_ID=${{ secrets.VITE_APP_APP_ID }}" >> .env
           echo "VITE_APP_MEASUREMENT_ID=${{ secrets.VITE_APP_MEASUREMENT_ID }}" >> .env
 
-      # 環境変数のデバッグ（オプション）
-      - name: Debug environment variables
-        working-directory: project
-        run: cat .env
-
       # プロジェクトのビルド
       - name: Build the project
         working-directory: project
