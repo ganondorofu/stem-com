@@ -1,6 +1,6 @@
 // src/pages/EditArticle.tsx
 import React, { useState, useRef, useEffect, FormEvent } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc, serverTimestamp, collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase/db.ts";
 import { nanoid } from "nanoid"; // 短いユニークID生成用
@@ -40,12 +40,12 @@ const EditArticle: React.FC = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [title, setTitle] = useState<string>("");
   const [userId, setUserId] = useState<string | null>(null); // ユーザーIDを保持するステート
-  const [userAvatar, setUserAvatar] = useState<string | null>(null); // ユーザーのアバターURLを保持するステート
   const editorRef = useRef<Editor>(null);
   const navigate = useNavigate();
   const auth = getAuth();
 
-  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+  // Removed unused variables
+  // const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [allUsers, setAllUsers] = useState<UserData[]>([]); // 全ユーザーのリスト
   const [selectedEditors, setSelectedEditors] = useState<UserData[]>([]); // 選択された編集者
   const [editorSearch, setEditorSearch] = useState<string>(""); // 編集者検索用のステート
@@ -56,10 +56,9 @@ const EditArticle: React.FC = () => {
   useEffect(() => {
     // 認証状態の監視
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
       if (user) {
         setUserId(user.uid);
-        setUserAvatar(user.photoURL || null);
+        setUserAvatar(user.photoURL || null); // Ensure userAvatar is used or remove it
       } else {
         setUserId(null);
         setUserAvatar(null);
@@ -203,51 +202,35 @@ const EditArticle: React.FC = () => {
   const processMarkdownContent = async (
     markdown: string
   ): Promise<string> => {
-    // Base64形式の画像を検出する正規表現
     const base64ImageRegex =
       /!\[([^\]]*)\]\((data:image\/[a-zA-Z]+;base64,([^)]+))\)/g;
 
-    // 画像アップロードのプロミスを格納する配列
     const uploadPromises: Promise<void>[] = [];
-
-    // マッチを一時的に保存するオブジェクト
     const base64ToGitHubURLMap: { [key: string]: string } = {};
 
-    let match;
-    while ((match = base64ImageRegex.exec(markdown)) !== null) {
-      const fullMatch = match[0];
-      const altText = match[1];
+    const matches = Array.from(markdown.matchAll(base64ImageRegex));
+
+    matches.forEach(match => {
       const dataUrl = match[2];
       const base64Data = match[3];
 
-      // 同じ画像を複数回アップロードしないようにする
-      if (base64ToGitHubURLMap[dataUrl]) {
-        continue;
+      if (!base64ToGitHubURLMap[dataUrl]) {
+        uploadPromises.push(
+          uploadBase64ImageToGitHub(base64Data, match[0])
+            .then(imageUrl => {
+              base64ToGitHubURLMap[dataUrl] = imageUrl;
+            })
+            .catch(error => {
+              console.error("画像のアップロードに失敗しました:", error);
+              alert("画像のアップロードに失敗しました。");
+              throw error;
+            })
+        );
       }
+    });
 
-      // 画像をアップロードするプロミスを作成
-      const uploadPromise = (async () => {
-        try {
-          const imageUrl = await uploadBase64ImageToGitHub(
-            base64Data,
-            match[0]
-          );
-          base64ToGitHubURLMap[dataUrl] = imageUrl;
-        } catch (error) {
-          console.error("画像のアップロードに失敗しました:", error);
-          alert("画像のアップロードに失敗しました。");
-          // 投稿を中断する場合はエラーをスロー
-          throw error;
-        }
-      })();
-
-      uploadPromises.push(uploadPromise);
-    }
-
-    // すべての画像アップロードが完了するまで待機
     await Promise.all(uploadPromises);
 
-    // Markdownコンテンツ内のBase64画像URLをGitHubのURLに置換
     const updatedMarkdown = markdown.replace(
       base64ImageRegex,
       (match, alt, dataUrl, base64Data) => {
@@ -255,7 +238,6 @@ const EditArticle: React.FC = () => {
         if (githubUrl) {
           return `![${alt}](${githubUrl})`;
         }
-        // アップロードに失敗した場合は元のBase64画像を保持
         return match;
       }
     );

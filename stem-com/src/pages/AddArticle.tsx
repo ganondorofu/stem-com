@@ -172,22 +172,23 @@ const AddArticle: React.FC = () => {
 
     let match;
     while ((match = base64ImageRegex.exec(markdown)) !== null) {
-      const fullMatch = match[0];
-      const altText = match[1];
-      const dataUrl = match[2];
-      const base64Data = match[3];
+      const [fullMatch, /* altText */, dataUrl, base64Data] = match;
 
       // 同じ画像を複数回アップロードしないようにする
       if (base64ToGitHubURLMap[dataUrl]) {
         continue;
       }
 
+      // Capture variables to avoid referencing 'match' directly
+      const currentFullMatch = fullMatch;
+      const currentBase64Data = base64Data;
+
       // 画像をアップロードするプロミスを作成
       const uploadPromise = (async () => {
         try {
           const imageUrl = await uploadBase64ImageToGitHub(
-            base64Data,
-            match[0]
+            currentBase64Data,
+            currentFullMatch
           );
           base64ToGitHubURLMap[dataUrl] = imageUrl;
         } catch (error) {
