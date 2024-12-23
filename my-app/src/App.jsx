@@ -65,13 +65,6 @@ const App = () => {
       ) : (
         <div>
           <p>こんにちは、{user.displayName} さん！</p>
-          <Router>
-            <Routes>
-              <Route path="/" element={<ArticleList />} />
-              <Route path="/articles/:id" element={<ArticleDetail />} />
-              <Route path="/add-article" element={<AddArticle />} />
-            </Routes>
-          </Router>
         </div>
       )}
     </div>
