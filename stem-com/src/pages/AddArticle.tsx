@@ -1,7 +1,7 @@
 // src/pages/AddArticle.tsx
 import React, { useState, useRef, useEffect, FormEvent } from "react";
 import { doc, setDoc, serverTimestamp, collection, getDocs } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { db } from "../lib/firebase/db.ts";
 import { nanoid } from "nanoid"; // 短いユニークID生成用
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -232,7 +232,7 @@ const AddArticle: React.FC = () => {
     originalMatch: string
   ): Promise<string> => {
     const GITHUB_API_URL = `https://api.github.com/repos/ganondorofu/Img_save/contents/static/images/`;
-    const GITHUB_TOKEN = import.meta.env.REACT_TOKEN;
+    const GITHUB_TOKEN = process.env.REACT_GITHUB_TOKEN;
 
     // 画像の種類を判別
     const imageTypeMatch = originalMatch.match(
