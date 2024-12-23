@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client"; // react-dom/client を使う
 import App from "./App.tsx"; // App コンポーネントをインポート
 import "./index.css"; // 必要なら CSS をインポート
 
