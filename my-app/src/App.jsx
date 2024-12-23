@@ -47,6 +47,7 @@ const App = () => {
       // } else {
       //   throw new Error("指定された組織に所属していません");
       // }
+      setUser(result.user);
 
     } catch (error) {
       console.error("GitHubログインエラー:", error);

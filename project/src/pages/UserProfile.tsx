@@ -26,7 +26,7 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (!id) {
-        navigate("/");
+        navigate("/stem-com/");
         return;
       }
 
@@ -62,7 +62,7 @@ const UserProfile: React.FC = () => {
   }, [id, navigate, auth]);
 
   const redirectToEditProfile = () => {
-    navigate("/profileset");
+    navigate("/stem-com/profileset");
   };
 
   if (loading) {
