@@ -1,5 +1,6 @@
+// src/App.tsx
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom"; // HashRouter をインポート
 import { getAuth, signInWithPopup, GithubAuthProvider, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import ArticleList from "./pages/ArticleList";
 import Profileset from "./pages/Profile-set";
@@ -172,12 +173,14 @@ const App = () => {
       <div className="min-h-screen bg-lightBackground dark:bg-darkBackground text-gray-900 dark:text-gray-100 transition-colors duration-300">
         <Navbar user={user} onLogout={handleLogout} toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
         <Routes>
-          <Route path="/stem-com/" element={<ArticleList />} />
-          <Route path="/stem-com/articles/:id" element={<ArticleDetail />} />
-          <Route path="/stem-com/users/:id" element={<UserProfile />} />
-          <Route path="/stem-com/profileset" element={<Profileset />} />
-          <Route path="/stem-com/articles/:id/edit" element={<EditArticle />} />
-          <Route path="/stem-com/add-article/" element={<AddArticle />} />
+          <Route path="/add-article" element={<AddArticle />} />
+          <Route path="/articles/:id" element={<ArticleDetail />} />
+          <Route path="/users/:id" element={<UserProfile />} />
+          <Route path="/profileset" element={<Profileset />} />
+          <Route path="/articles/:id/edit" element={<EditArticle />} />
+          <Route path="/" element={<ArticleList />} />
+          {/* 必要に応じて他のルートを追加 */}
+          <Route path="*" element={<Navigate to="/" replace />} /> {/* 404 用 */}
         </Routes>
       </div>
     </Router>
