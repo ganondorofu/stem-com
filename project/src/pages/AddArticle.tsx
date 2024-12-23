@@ -232,7 +232,7 @@ const AddArticle: React.FC = () => {
     originalMatch: string
   ): Promise<string> => {
     const GITHUB_API_URL = `https://api.github.com/repos/ganondorofu/Img_save/contents/static/images/`;
-    const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
+    const GITHUB_TOKEN = import.meta.env.VITE_TOKEN;
 
     // 画像の種類を判別
     const imageTypeMatch = originalMatch.match(
