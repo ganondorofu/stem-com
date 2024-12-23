@@ -91,7 +91,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* ロゴとタイトル */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/stem-com/" className="flex items-center space-x-3">
             <BookOpen className="h-8 w-8" />
             <span className="font-bold text-xl">Club Blog</span>
           </Link>
@@ -100,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           <div className="flex items-center space-x-4">
             {/* 新規投稿リンク */}
             <Link 
-              to="/add-article" 
+              to="/stem-com/add-article" 
               className="flex items-center space-x-2 px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors dark:hover:bg-gray-700"
             >
               <PenLine className="h-5 w-5" />
@@ -120,7 +120,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             {user ? (
               <>
                 {/* アバターをプロフィールページへのリンクに変更 */}
-                <Link to={`/users/${user.uid}`} className="flex items-center space-x-3 cursor-pointer">
+                <Link to={`/stem-com/users/${user.uid}`} className="flex items-center space-x-3 cursor-pointer">
                   {user.photoURL ? (
                     <img
                       src={user.photoURL}
@@ -145,7 +145,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             ) : (
               /* ユーザーがログインしていない場合はログインリンクを表示 */
               <Link 
-                to="/login" 
+                to="/stem-com/login" 
                 className="flex items-center space-x-2 px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors dark:hover:bg-gray-700"
               >
                 <PenLine className="h-5 w-5" />
