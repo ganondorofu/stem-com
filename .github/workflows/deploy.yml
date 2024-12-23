@@ -36,6 +36,8 @@ jobs:
           echo "VITE_APP_MESSAGING_SENDER_ID=${{ secrets.VITE_APP_MESSAGING_SENDER_ID }}" >> .env
           echo "VITE_APP_APP_ID=${{ secrets.VITE_APP_APP_ID }}" >> .env
           echo "VITE_APP_MEASUREMENT_ID=${{ secrets.VITE_APP_MEASUREMENT_ID }}" >> .env
+          echo "VITE_TOKEN=${{ secrets.VITE_TOKEN }}" >> .env
+          echo "VITE_TOKEN2=${{ secrets.VITE_TOKEN2 }}" >> .env
 
       # プロジェクトのビルド
       - name: Build the project
