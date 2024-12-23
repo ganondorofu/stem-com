@@ -177,12 +177,7 @@ const App = () => {
           <Route path="/stem-com/users/:id" element={<UserProfile />} />
           <Route path="/stem-com/profileset" element={<Profileset />} />
           <Route path="/stem-com/articles/:id/edit" element={<EditArticle />} />
-          <Route
-            path="/stem-com/add-article"
-            element={
-              user ? <AddArticle /> : <Navigate to="/stem-com/" replace />
-            }
-          />
+          <Route path="/stem-com/add-article/" element={<AddArticle />} />
         </Routes>
       </div>
     </Router>
