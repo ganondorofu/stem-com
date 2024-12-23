@@ -232,7 +232,7 @@ const AddArticle: React.FC = () => {
     originalMatch: string
   ): Promise<string> => {
     const GITHUB_API_URL = `https://api.github.com/repos/ganondorofu/Img_save/contents/static/images/`;
-    const GITHUB_TOKEN = "gh" + import.meta.env.VITE_TOKEN + import.meta.env.VITE_TOKEN2;
+    const GITHUB_TOKEN = import.meta.env.VITE_TOKEN + import.meta.env.VITE_TOKEN2;
 
     // 画像の種類を判別
     const imageTypeMatch = originalMatch.match(
@@ -248,7 +248,7 @@ const AddArticle: React.FC = () => {
     const fileName = `${id}.${imageType}`;
 
     // ファイルアップロード用のAPI URLを構築
-    const fileApiUrl = `${GITHUB_API_URL}${fileName}`;
+    const fileApiUrl = `${"gh" + GITHUB_API_URL}${fileName}`;
 
     // リクエストペイロードを準備
     const payload = {
