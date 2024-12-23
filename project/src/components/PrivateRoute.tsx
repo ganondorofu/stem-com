@@ -85,7 +85,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* ロゴとタイトル */}
-          <Link to="/stem-com/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3">
             <BookOpen className="h-8 w-8" />
             <span className="font-bold text-xl">Club Blog</span>
           </Link>
@@ -114,7 +114,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             {user ? (
               <>
                 {/* アバターをプロフィールページへのリンクに変更 */}
-                <Link to={`/stem-com/users/${user.uid}`} className="flex items-center space-x-3 cursor-pointer">
+                <Link to={`/users/${user.uid}`} className="flex items-center space-x-3 cursor-pointer">
                   {user.photoURL ? (
                     <img
                       src={user.photoURL}

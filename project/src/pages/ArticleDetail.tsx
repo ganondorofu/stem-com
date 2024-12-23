@@ -174,7 +174,7 @@ const ArticleDetail: React.FC = () => {
             {/* 編集ボタン */}
             {canEdit() && (
               <Link
-                to={`/stem-com/articles/${article.id}/edit`}
+                to={`/articles/${article.id}/edit`}
                 className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200 flex items-center"
                 title="編集"
               >
@@ -191,7 +191,7 @@ const ArticleDetail: React.FC = () => {
             <div className="flex items-center space-x-2">
               {/* 著者のアバターと表示名 */}
               {author?.avatarUrl ? (
-                <Link to={`/stem-com/users/${author.uid}`}>
+                <Link to={`/users/${author.uid}`}>
                   <img
                     src={author.avatarUrl}
                     alt={`${author.displayName}のアバター`}

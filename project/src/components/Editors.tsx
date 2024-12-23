@@ -25,7 +25,7 @@ const Editors: React.FC<EditorsProps> = ({ editors, showNames = true }) => {
     return (
       <div className="flex items-center space-x-2 mt-2">
         {editor.avatarUrl ? (
-          <Link to={`/stem-com/users/${editor.uid}`}>
+          <Link to={`/users/${editor.uid}`}>
             <img
               src={editor.avatarUrl}
               alt={`${editor.displayName}のアバター`}
@@ -37,7 +37,7 @@ const Editors: React.FC<EditorsProps> = ({ editors, showNames = true }) => {
           <User className="h-6 w-6 text-gray-400" />
         )}
         {showNames && (
-          <Link to={`/stem-com/users/${editor.uid}`} className="text-sm text-gray-700 dark:text-gray-300 hover:underline">
+          <Link to={`/users/${editor.uid}`} className="text-sm text-gray-700 dark:text-gray-300 hover:underline">
             {editor.displayName}
           </Link>
         )}
@@ -51,7 +51,7 @@ const Editors: React.FC<EditorsProps> = ({ editors, showNames = true }) => {
   return (
     <div className="flex items-center space-x-2 mt-2">
       {displayEditors.map((editor) => (
-        <Link key={editor.uid} to={`/stem-com/users/${editor.uid}`}>
+        <Link key={editor.uid} to={`/users/${editor.uid}`}>
           {editor.avatarUrl ? (
             <img
               src={editor.avatarUrl}
@@ -82,7 +82,7 @@ const Editors: React.FC<EditorsProps> = ({ editors, showNames = true }) => {
                 {editors.map((editor) => (
                   <li key={editor.uid} className="flex items-center space-x-3">
                     {editor.avatarUrl ? (
-                      <Link to={`/stem-com/users/${editor.uid}`}>
+                      <Link to={`/users/${editor.uid}`}>
                         <img
                           src={editor.avatarUrl}
                           alt={`${editor.displayName}のアバター`}
@@ -94,7 +94,7 @@ const Editors: React.FC<EditorsProps> = ({ editors, showNames = true }) => {
                       <User className="h-10 w-10 text-gray-400" />
                     )}
                     {showNames && (
-                      <Link to={`/stem-com/users/${editor.uid}`} className="text-lg font-medium text-gray-800 dark:text-gray-100 hover:underline">
+                      <Link to={`/users/${editor.uid}`} className="text-lg font-medium text-gray-800 dark:text-gray-100 hover:underline">
                         {editor.displayName}
                       </Link>
                     )}

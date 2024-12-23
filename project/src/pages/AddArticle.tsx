@@ -144,7 +144,7 @@ const AddArticle: React.FC = () => {
       setTitle("");
       editorInstance?.setMarkdown("");
       setSelectedEditors([]); // 編集者の選択をリセット
-      navigate("/stem-com/"); // 投稿後にリダイレクト
+      navigate("/"); // 投稿後にリダイレクト
     } catch (error) {
       console.error("エラー:", error);
       alert("記事の投稿に失敗しました。");

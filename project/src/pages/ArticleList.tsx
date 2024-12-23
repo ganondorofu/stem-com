@@ -111,7 +111,7 @@ const ArticleList: React.FC = () => {
           {articles.map((article) => (
             <Link
               key={article.id}
-              to={`/stem-com/articles/${article.id}`}
+              to={`/articles/${article.id}`}
               className="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden dark:bg-gray-800"
             >
               <div className="p-6 flex flex-col h-full">
@@ -127,7 +127,7 @@ const ArticleList: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     {/* 著者のアバター */}
                     {users[article.authorId]?.avatarUrl ? (
-                      <Link to={`/stem-com/users/${article.authorId}`}>
+                      <Link to={`/users/${article.authorId}`}>
                         <img
                           src={users[article.authorId].avatarUrl}
                           alt={`${users[article.authorId].displayName}のアバター`}

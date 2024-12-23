@@ -187,7 +187,7 @@ const EditArticle: React.FC = () => {
       }, { merge: true });
 
       alert("記事を更新しました！");
-      navigate(`/stem-com/articles/${article.id}`);
+      navigate(`/articles/${article.id}`);
     } catch (error) {
       console.error("エラー:", error);
       alert("記事の更新に失敗しました。");
