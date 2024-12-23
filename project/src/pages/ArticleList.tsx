@@ -85,7 +85,7 @@ const ArticleList: React.FC = () => {
         {articles.map((article) => (
           <Link
             key={article.id}
-            to={`/articles/${article.id}`}
+            to={`/stem-com/articles/${article.id}`}
             className="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden dark:bg-gray-800"
           >
             <div className="p-6">
