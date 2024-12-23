@@ -37,7 +37,6 @@ jobs:
           echo "REACT_APP_APP_ID=${{ secrets.REACT_APP_APP_ID }}" >> .env
           echo "REACT_APP_MEASUREMENT_ID=${{ secrets.REACT_APP_MEASUREMENT_ID }}" >> .env
           echo "REACT_APP_TOKEN=${{ secrets.REACT_APP_TOKEN }}" >> .env
-          echo "REACT_APP_TOKEN2=${{ secrets.REACT_APP_TOKEN2 }}" >> .env
 
       # プロジェクトのビルド
       - name: Build the project
