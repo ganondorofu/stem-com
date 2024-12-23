@@ -106,7 +106,7 @@ const ArticleDetail: React.FC = () => {
           <div className="flex items-center space-x-6 text-gray-500 dark:text-gray-400 mb-8">
             <div className="flex items-center space-x-3">
               {author?.avatarUrl ? (
-                <Link to={`/users/${article.authorId}`}>
+                <Link to={`/stem-com/users/${article.authorId}`}>
                   <img
                     src={author.avatarUrl}
                     alt={`${author.displayName}のアバター`}
@@ -116,7 +116,7 @@ const ArticleDetail: React.FC = () => {
               ) : (
                 <User className="h-10 w-10 text-gray-400" />
               )}
-              <Link to={`/users/${article.authorId}`} className="hover:underline">
+              <Link to={`/stem-com/users/${article.authorId}`} className="hover:underline">
                 <span className="text-lg font-medium">{author?.displayName || "ユーザー"}</span>
               </Link>
             </div>

@@ -26,13 +26,13 @@ const ArticleList = () => {
   return (
     <div>
       <h1>記事一覧</h1>
-      <Link to="/add-article">
+      <Link to="/stem-com/add-article">
         <button>記事を追加</button>
       </Link>
       <ul>
         {articles.map((article) => (
           <li key={article.id}>
-            <Link to={`/articles/${article.id}`}>{article.title}</Link>
+            <Link to={`/stem-com/articles/${article.id}`}>{article.title}</Link>
           </li>
         ))}
       </ul>
