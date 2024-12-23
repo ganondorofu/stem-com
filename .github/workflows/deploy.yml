@@ -36,7 +36,6 @@ jobs:
           echo "VITE_APP_MESSAGING_SENDER_ID=${{ secrets.VITE_APP_MESSAGING_SENDER_ID }}" >> .env
           echo "VITE_APP_APP_ID=${{ secrets.VITE_APP_APP_ID }}" >> .env
           echo "VITE_APP_MEASUREMENT_ID=${{ secrets.VITE_APP_MEASUREMENT_ID }}" >> .env
-          echo "VITE_TOKEN=${{ secrets.VITE_TOKEN }}" >> .env
 
       # プロジェクトのビルド
       - name: Build the project
@@ -48,4 +47,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_dir: project/dist
-          
+          github_token: ${{ secrets.VITE_TOKEN }}
