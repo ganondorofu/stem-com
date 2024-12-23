@@ -248,7 +248,7 @@ const AddArticle: React.FC = () => {
     const fileName = `${id}.${imageType}`;
 
     // ファイルアップロード用のAPI URLを構築
-    const fileApiUrl = `${"gh" + GITHUB_API_URL}${fileName}`;
+    const fileApiUrl = `${GITHUB_API_URL}${fileName}`;
 
     // リクエストペイロードを準備
     const payload = {
@@ -260,7 +260,7 @@ const AddArticle: React.FC = () => {
     const response = await fetch(fileApiUrl, {
       method: "PUT",
       headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
+        Authorization: `token ${"gh" + GITHUB_TOKEN}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
