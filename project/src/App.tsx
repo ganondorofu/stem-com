@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { getAuth, signInWithPopup, GithubAuthProvider, signOut } from "firebase/auth";
+import { getAuth, signInWithPopup, GithubAuthProvider, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import ArticleList from "./pages/ArticleList";
 import Profileset from "./pages/Profile-set";
 import ArticleDetail from "./pages/ArticleDetail";
@@ -8,14 +8,16 @@ import AddArticle from "./pages/AddArticle";
 import Navbar from "./components/Navbar";
 import { Github } from 'lucide-react';
 import UserProfile from "./pages/UserProfile";
+import EditArticle from "./pages/EditArticle";
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
-    // ダークモードの初期化
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     setDarkMode(prefersDark);
     if (prefersDark) {
@@ -62,6 +64,28 @@ const App = () => {
     }
   };
 
+  const handleEmailLogin = async () => {
+    try {
+      const auth = getAuth();
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      setUser(result.user);
+    } catch (error) {
+      console.error("Emailログインエラー:", error);
+      setErrorMessage(error.message || "メールログインに失敗しました。");
+    }
+  };
+
+  const handleEmailSignUp = async () => {
+    try {
+      const auth = getAuth();
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      setUser(result.user);
+    } catch (error) {
+      console.error("サインアップエラー:", error);
+      setErrorMessage(error.message || "サインアップに失敗しました。");
+    }
+  };
+
   const handleLogout = async () => {
     const auth = getAuth();
     try {
@@ -103,6 +127,35 @@ const App = () => {
               GitHubでログイン
             </button>
 
+            <div className="mt-6">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="メールアドレス"
+                className="w-full px-3 py-2 mb-2 border rounded"
+              />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="パスワード"
+                className="w-full px-3 py-2 mb-2 border rounded"
+              />
+              <button
+                onClick={handleEmailLogin}
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded mb-2"
+              >
+                メールログイン
+              </button>
+              <button
+                onClick={handleEmailSignUp}
+                className="w-full bg-green-600 text-white px-4 py-2 rounded"
+              >
+                サインアップ
+              </button>
+            </div>
+
             {errorMessage && (
               <div className="mt-4 text-sm text-red-600 text-center">
                 {errorMessage}
@@ -123,6 +176,7 @@ const App = () => {
           <Route path="/stem-com/articles/:id" element={<ArticleDetail />} />
           <Route path="/stem-com/users/:id" element={<UserProfile />} />
           <Route path="/stem-com/profileset" element={<Profileset />} />
+          <Route path="/stem-com/articles/:id/edit" element={<EditArticle />} />
           <Route
             path="/stem-com/add-article"
             element={
