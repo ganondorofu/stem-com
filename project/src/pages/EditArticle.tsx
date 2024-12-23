@@ -275,7 +275,7 @@ const EditArticle: React.FC = () => {
     originalMatch: string
   ): Promise<string> => {
     const GITHUB_API_URL = `https://api.github.com/repos/ganondorofu/Img_save/contents/static/images/`;
-    const GITHUB_TOKEN = import.meta.env.VITE_TOKEN + import.meta.env.VITE_TOKEN2;
+    const GITHUB_TOKEN = import.meta.env.REACT_TOKEN;
 
     // 画像の種類を判別
     const imageTypeMatch = originalMatch.match(
@@ -303,7 +303,7 @@ const EditArticle: React.FC = () => {
     const response = await fetch(fileApiUrl, {
       method: "PUT",
       headers: {
-        Authorization: `token ${"gh" + GITHUB_TOKEN}`,
+        Authorization: `token ${GITHUB_TOKEN}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),

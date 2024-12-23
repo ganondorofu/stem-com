@@ -22,31 +22,31 @@ jobs:
 
       # 依存関係をインストール
       - name: Install dependencies
-        working-directory: project
+        working-directory: stem-com
         run: npm install --force
 
       # 環境変数の注入
       - name: Inject environment variables
-        working-directory: project
+        working-directory: stem-com
         run: |
-          echo "VITE_APP_API_KEY=${{ secrets.VITE_APP_API_KEY }}" >> .env
-          echo "VITE_APP_AUTH_DOMAIN=${{ secrets.VITE_APP_AUTH_DOMAIN }}" >> .env
-          echo "VITE_APP_PROJECT_ID=${{ secrets.VITE_APP_PROJECT_ID }}" >> .env
-          echo "VITE_APP_STORAGE_BUCKET=${{ secrets.VITE_APP_STORAGE_BUCKET }}" >> .env
-          echo "VITE_APP_MESSAGING_SENDER_ID=${{ secrets.VITE_APP_MESSAGING_SENDER_ID }}" >> .env
-          echo "VITE_APP_APP_ID=${{ secrets.VITE_APP_APP_ID }}" >> .env
-          echo "VITE_APP_MEASUREMENT_ID=${{ secrets.VITE_APP_MEASUREMENT_ID }}" >> .env
-          echo "VITE_TOKEN=${{ secrets.VITE_TOKEN }}" >> .env
-          echo "VITE_TOKEN2=${{ secrets.VITE_TOKEN2 }}" >> .env
+          echo "REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }}" >> .env
+          echo "REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}" >> .env
+          echo "REACT_APP_PROJECT_ID=${{ secrets.REACT_APP_PROJECT_ID }}" >> .env
+          echo "REACT_APP_STORAGE_BUCKET=${{ secrets.REACT_APP_STORAGE_BUCKET }}" >> .env
+          echo "REACT_APP_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}" >> .env
+          echo "REACT_APP_APP_ID=${{ secrets.REACT_APP_APP_ID }}" >> .env
+          echo "REACT_APP_MEASUREMENT_ID=${{ secrets.REACT_APP_MEASUREMENT_ID }}" >> .env
+          echo "REACT_TOKEN=${{ secrets.REACT_TOKEN }}" >> .env
+          echo "REACT_TOKEN2=${{ secrets.REACT_TOKEN2 }}" >> .env
 
       # プロジェクトのビルド
       - name: Build the project
-        working-directory: project
-        run: npm run build
+        working-directory: stem-com
+        run: npm build
 
       # GitHub Pages にデプロイ
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.VITE_GITHUB_TOKEN }}
-          publish_dir: project/dist
+          github_token: ${{ secrets.REACT_GITHUB_TOKEN }}
+          publish_dir: stem-com/dist

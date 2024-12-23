@@ -1,17 +1,15 @@
-// src/pages/AddArticle.tsx
+// src/pages/EditArticle.tsx
 import React, { useState, useRef, useEffect, FormEvent } from "react";
-import { doc, setDoc, serverTimestamp, collection, getDocs } from "firebase/firestore";
+import Link from "next/link";
+import { doc, getDoc, setDoc, serverTimestamp, collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { nanoid } from "nanoid"; // 短いユニークID生成用
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { useNavigate } from "react-router-dom";
+import { getAuth, onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css"; // 必要に応じてCSSをインポート
-
-// Import Firebase Authentication
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
 // Import custom CSS for editor styling
 import "../AddArticle.css";
@@ -20,10 +18,26 @@ import "../AddArticle.css";
 interface UserData {
   uid: string;
   displayName: string;
-  avatarUrl: string;
+  avatarUrl?: string;
 }
 
-const AddArticle: React.FC = () => {
+// 記事の型定義
+interface Article {
+  id: string;
+  title: string;
+  content: string;
+  created_at: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  authorId: string;
+  authorAvatarUrl?: string;
+  editors?: string[]; // 編集者のUIDの配列
+}
+
+const EditArticle: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [article, setArticle] = useState<Article | null>(null);
   const [title, setTitle] = useState<string>("");
   const [userId, setUserId] = useState<string | null>(null); // ユーザーIDを保持するステート
   const [userAvatar, setUserAvatar] = useState<string | null>(null); // ユーザーのアバターURLを保持するステート
@@ -31,59 +45,89 @@ const AddArticle: React.FC = () => {
   const navigate = useNavigate();
   const auth = getAuth();
 
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false); // ダークモードの状態を管理
-
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [allUsers, setAllUsers] = useState<UserData[]>([]); // 全ユーザーのリスト
   const [selectedEditors, setSelectedEditors] = useState<UserData[]>([]); // 選択された編集者
-
   const [editorSearch, setEditorSearch] = useState<string>(""); // 編集者検索用のステート
-
-  useEffect(() => {
-    // 初期のダークモード状態を設定
-    const checkDarkMode = () => {
-      const dark = document.documentElement.classList.contains("dark");
-      setIsDarkMode(dark);
-    };
-
-    checkDarkMode();
-
-    // ダークモードの変更を監視するためのMutationObserverを設定
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.type === "attributes" &&
-          mutation.attributeName === "class"
-        ) {
-          checkDarkMode();
-        }
-      });
-    });
-
-    observer.observe(document.documentElement, { attributes: true });
-
-    // クリーンアップ関数
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false); // ダークモードの状態を管理
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // 認証状態の監視
-    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
       if (user) {
-        // ユーザーがログインしている場合、UIDとアバターURLを取得
         setUserId(user.uid);
         setUserAvatar(user.photoURL || null);
       } else {
-        // ユーザーがログアウトしている場合、適切な処理を行う
         setUserId(null);
         setUserAvatar(null);
       }
     });
 
-    // クリーンアップ関数
     return () => unsubscribe();
   }, [auth]);
+
+  useEffect(() => {
+    const fetchArticle = async () => {
+      if (!id) {
+        navigate('/');
+        return;
+      }
+
+      try {
+        // 記事を取得
+        const docRef = doc(db, "articles", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data() as Article;
+          setArticle({
+            id: docSnap.id,
+            ...data,
+          });
+          setTitle(data.title);
+
+          // 編集者のデータを取得
+          if (data.editors && Array.isArray(data.editors)) {
+            const editorsData: UserData[] = [];
+            for (const editorId of data.editors) {
+              const editorDocRef = doc(db, "users", editorId);
+              const editorDoc = await getDoc(editorDocRef);
+
+              if (editorDoc.exists()) {
+                const editorData = editorDoc.data();
+                editorsData.push({
+                  uid: editorDoc.id,
+                  displayName: editorData.displayName || "ユーザー",
+                  avatarUrl: editorData.avatarUrl || undefined,
+                });
+              } else {
+                editorsData.push({
+                  uid: editorId,
+                  displayName: "ユーザー",
+                  avatarUrl: undefined,
+                });
+              }
+            }
+            setSelectedEditors(editorsData);
+          }
+        } else {
+          setError("記事が存在しません。");
+          navigate('/');
+        }
+      } catch (error) {
+        console.error("Error fetching article:", error);
+        setError("記事の取得に失敗しました。");
+        navigate('/');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticle();
+  }, [id, navigate]);
 
   useEffect(() => {
     // 全ユーザーをFirestoreから取得
@@ -121,6 +165,11 @@ const AddArticle: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (!article) {
+      alert("編集対象の記事が見つかりません。");
+      return;
+    }
+
     try {
       const editorInstance = editorRef.current?.getInstance();
       let markdownContent = editorInstance?.getMarkdown() || "";
@@ -128,26 +177,20 @@ const AddArticle: React.FC = () => {
       // 投稿時に画像を処理
       markdownContent = await processMarkdownContent(markdownContent);
 
-      // Firestoreに保存
-      const articleId = nanoid(10); // ユニークな記事IDを生成
-      const articleRef = doc(db, "articles", articleId);
+      // Firestoreに更新
+      const articleRef = doc(db, "articles", article.id);
       await setDoc(articleRef, {
         title,
         content: markdownContent,
-        created_at: serverTimestamp(),
-        authorId: userId, // 正しいユーザーIDを設定
-        authorAvatarUrl: userAvatar,
+        updated_at: serverTimestamp(),
         editors: selectedEditors.map((editor) => editor.uid), // 編集者のUIDを保存
-      });
+      }, { merge: true });
 
-      alert("記事を追加しました！");
-      setTitle("");
-      editorInstance?.setMarkdown("");
-      setSelectedEditors([]); // 編集者の選択をリセット
-      navigate("/"); // 投稿後にリダイレクト
+      alert("記事を更新しました！");
+      navigate(`/articles/${article.id}`);
     } catch (error) {
       console.error("エラー:", error);
-      alert("記事の投稿に失敗しました。");
+      alert("記事の更新に失敗しました。");
     }
   };
 
@@ -252,7 +295,7 @@ const AddArticle: React.FC = () => {
 
     // リクエストペイロードを準備
     const payload = {
-      message: `Add image: ${fileName}`,
+      message: `Update image: ${fileName}`,
       content: base64Data,
     };
 
@@ -276,10 +319,26 @@ const AddArticle: React.FC = () => {
     return imageUrl;
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (error || !article) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <p className="text-center text-red-500">{error || "記事が見つかりません。"}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-4 bg-lightBackground dark:bg-darkBackground min-h-screen">
       <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">
-        記事を追加
+        記事を編集
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* タイトル入力 */}
@@ -404,7 +463,7 @@ const AddArticle: React.FC = () => {
           </label>
           <Editor
             ref={editorRef}
-            initialValue="ここにMarkdownを入力"
+            initialValue={article.content}
             previewStyle="vertical"
             height="400px"
             initialEditType="wysiwyg" // WYSIWYGモードに設定
@@ -419,11 +478,11 @@ const AddArticle: React.FC = () => {
           type="submit"
           className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          投稿
+          更新
         </button>
       </form>
     </div>
   );
 };
 
-export default AddArticle;
+export default EditArticle;
