@@ -42,7 +42,7 @@ jobs:
       # プロジェクトのビルド
       - name: Build the project
         working-directory: stem-com
-        run: npm build
+        run: npm run build
 
       # GitHub Pages にデプロイ
       - name: Deploy to GitHub Pages
