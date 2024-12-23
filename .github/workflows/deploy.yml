@@ -22,12 +22,10 @@ jobs:
 
       # 依存関係をインストール
       - name: Install dependencies
-        working-directory: stem-com
         run: npm install --force
 
       # 環境変数の注入
       - name: Inject environment variables
-        working-directory: stem-com
         run: |
           echo "REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }}" >> .env
           echo "REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}" >> .env
@@ -40,7 +38,6 @@ jobs:
 
       # プロジェクトのビルド
       - name: Build the project
-        working-directory: stem-com
         run: npm run build
 
       # GitHub Pages にデプロイ
@@ -48,4 +45,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.REACT_GITHUB_TOKEN }}
-          publish_dir: stem-com/dist
+          publish_dir: build  # ここでビルドされたファイルが出力されるディレクトリを指定
