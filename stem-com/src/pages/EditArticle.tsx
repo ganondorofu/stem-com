@@ -6,7 +6,7 @@ import { db } from "../lib/firebase/db.ts";
 import { nanoid } from "nanoid"; // 短いユニークID生成用
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { getAuth, onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css"; // 必要に応じてCSSをインポート
@@ -49,7 +49,6 @@ const EditArticle: React.FC = () => {
   const [allUsers, setAllUsers] = useState<UserData[]>([]); // 全ユーザーのリスト
   const [selectedEditors, setSelectedEditors] = useState<UserData[]>([]); // 選択された編集者
   const [editorSearch, setEditorSearch] = useState<string>(""); // 編集者検索用のステート
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false); // ダークモードの状態を管理
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
