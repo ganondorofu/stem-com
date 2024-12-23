@@ -119,14 +119,14 @@ const App = () => {
       <div className="min-h-screen bg-lightBackground dark:bg-darkBackground text-gray-900 dark:text-gray-100 transition-colors duration-300">
         <Navbar user={user} onLogout={handleLogout} toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
         <Routes>
-          <Route path="/" element={<ArticleList />} />
-          <Route path="/articles/:id" element={<ArticleDetail />} />
-          <Route path="/users/:id" element={<UserProfile />} />
-          <Route path="/profileset" element={<Profileset />} />
+          <Route path="/stem-com/" element={<ArticleList />} />
+          <Route path="/stem-com/articles/:id" element={<ArticleDetail />} />
+          <Route path="/stem-com/users/:id" element={<UserProfile />} />
+          <Route path="/stem-com/profileset" element={<Profileset />} />
           <Route
-            path="/add-article"
+            path="/stem-com/add-article"
             element={
-              user ? <AddArticle /> : <Navigate to="/" replace />
+              user ? <AddArticle /> : <Navigate to="/stem-com/" replace />
             }
           />
         </Routes>
