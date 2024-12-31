@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/stem-com/static/css/main.e75bd4b2.css",
-    "main.js": "/stem-com/static/js/main.7ae85375.js",
+    "main.js": "/stem-com/static/js/main.b9487672.js",
     "static/media/index.cjs": "/stem-com/static/media/index.c05687ef19f5bac24939.cjs",
     "index.html": "/stem-com/index.html",
     "main.e75bd4b2.css.map": "/stem-com/static/css/main.e75bd4b2.css.map",
-    "main.7ae85375.js.map": "/stem-com/static/js/main.7ae85375.js.map"
+    "main.b9487672.js.map": "/stem-com/static/js/main.b9487672.js.map"
   },
   "entrypoints": [
     "static/css/main.e75bd4b2.css",
-    "static/js/main.7ae85375.js"
+    "static/js/main.b9487672.js"
   ]
 }
