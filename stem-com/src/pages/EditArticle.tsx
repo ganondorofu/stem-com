@@ -256,7 +256,7 @@ const EditArticle: React.FC = () => {
     originalMatch: string
   ): Promise<string> => {
     const GITHUB_API_URL = `https://api.github.com/repos/ganondorofu/Img_save/contents/static/images/`;
-    const GITHUB_TOKEN = process.env.REACT_APP_TOKEN;
+    const GITHUB_TOKEN = await fetchGithubToken();
 
     // 画像の種類を判別
     const imageTypeMatch = originalMatch.match(
@@ -279,6 +279,24 @@ const EditArticle: React.FC = () => {
       message: `Update image: ${fileName}`,
       content: base64Data,
     };
+
+    async function fetchGithubToken() {
+      try {
+        const docRef = doc(db, "keys", "AjZSjYVj4CZSk1O7s8zG"); // 正しいドキュメントIDを指定
+        const docSnap = await getDoc(docRef);
+    
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          return data.key; // "key" フィールドの値を返す
+        } else {
+          console.error("Document not found!");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error fetching token:", error);
+        return null;
+      }
+    }
 
     // GitHubに画像をアップロードするリクエストを送信
     const response = await fetch(fileApiUrl, {
