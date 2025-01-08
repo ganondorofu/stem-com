@@ -1,6 +1,6 @@
 // src/pages/AddArticle.tsx
 import React, { useState, useRef, useEffect, FormEvent } from "react";
-import { doc, setDoc, serverTimestamp, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, collection, getDocs, getDoc } from "firebase/firestore";
 import { db } from "../lib/firebase/db.ts";
 import { nanoid } from "nanoid"; // 短いユニークID生成用
 import { Editor } from "@toast-ui/react-editor";
@@ -221,6 +221,24 @@ const AddArticle: React.FC = () => {
     return updatedMarkdown;
   };
 
+  async function fetchGithubToken() {
+    try {
+      const docRef = doc(db, "keys", "AjZSjYVj4CZSk1O7s8zG"); // 正しいドキュメントIDを指定
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        return data.key; // "key" フィールドの値を返す
+      } else {
+        console.error("Document not found!");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching token:", error);
+      return null;
+    }
+  }
+
   /**
    * Base64形式の画像データをGitHubにアップロードし、URLを返す
    *
@@ -233,7 +251,7 @@ const AddArticle: React.FC = () => {
     originalMatch: string
   ): Promise<string> => {
     const GITHUB_API_URL = `https://api.github.com/repos/ganondorofu/Img_save/contents/static/images/`;
-    const GITHUB_TOKEN = process.env.REACT_APP_TOKEN;
+    const GITHUB_TOKEN = await fetchGithubToken();
 
     // 画像の種類を判別
     const imageTypeMatch = originalMatch.match(
